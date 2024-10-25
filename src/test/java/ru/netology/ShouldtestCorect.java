@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 import com.github.javafaker.Faker;
 import org.example.DataGenerator;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -26,15 +27,29 @@ public class ShouldtestCorect {
     }
 
     @Test
-    void houldReturnSuccessIfFieldsAreFilledInCorrectl(){
+    @DisplayName("Все поля заполненны корректно")
+    void ShouldReturnSuccessIfFieldsAreFilledCorrectl(){
 
-        $("[data-test-id='city'] [placeholder='Город']").setValue(DataGenerator.generateCity());
-        $("[data-test-id='name'] [type = text]").setValue(DataGenerator.generateName());
-        $("[data-test-id='phone'] [placeholder='+7 000 000 00 00']").setValue(DataGenerator.generatePhonenumber());
+        $("[data-test-id='city'] [placeholder='Город']").setValue(DataGenerator.generateCorectCity());
+        $("[data-test-id='name'] [type = text]").setValue(DataGenerator.generateCorectName());
+        $("[data-test-id='phone'] [placeholder='+7 000 000 00 00']").setValue(DataGenerator.generateCorectPhonenumber());
         $("[data-test-id=agreement]").click();
         $("[role=button] .button__content").click();
         $(withText("Успешно!")).shouldBe(Condition.visible);
-        //$("[data-test-id='notification'] .notification__content")
-           //     .shouldHave(Condition.exactText("Встреча успешно забронирована на " + DataGenerator.generateDate(3, "dd.MM.yyyy")));
+        $("[role=button] .button__content").click();
+        $(withText("Перепланировать")).click();
+    }
+
+    @Test
+    @DisplayName("Ошибка при неправильноуказанном городе")
+    public void shouldReturnErrorMessageIfCityInvalid() {
+
+        $("[data-test-id='city'] [placeholder='Город']").setValue(DataGenerator.generateCorectCity());
+        $("[data-test-id='name'] [type=text]").setValue(DataGenerator.generateInCorectName());
+        $("[data-test-id='phone'] [type=tel]").setValue(DataGenerator.generateCorectPhonenumber());
+        $("[data-test-id=agreement]").click();
+        $("[role=button] .button__content").click();
+        $("[data-test-id='city'].input_invalid .input__sub").shouldBe(visible).
+                shouldHave(exactText("Доставка в выбранный город недоступна"));
     }
 }
