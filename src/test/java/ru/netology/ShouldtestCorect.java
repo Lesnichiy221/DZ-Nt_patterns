@@ -52,7 +52,7 @@ public class ShouldtestCorect {
         $("[role=button] .button__content").click();
         $("[data-test-id='city'].input_invalid .input__sub").shouldBe(visible).
                 shouldHave(exactText("Доставка в выбранный город недоступна"));
-        
+
     }
 
     @Test
