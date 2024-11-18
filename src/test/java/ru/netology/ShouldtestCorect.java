@@ -7,6 +7,7 @@ import org.example.DataGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -77,7 +78,25 @@ public class ShouldtestCorect {
         $(withText("Успешно!")).shouldBe(Condition.visible);
         $("[role=button] .button__content").click();
         $(withText("Перепланировать")).click();
+    }
 
+    @Test
+    @DisplayName("перепланировка даты")
+    void ShouldReturnSuccessIfchangeDate(){
 
+        $("[data-test-id='city'] [placeholder='Город']").setValue(DataGenerator.generateCorectCity());
+        $("[data-test-id='name'] [type = text]").setValue(DataGenerator.generateCorectName());
+        $("[data-test-id='phone'] [placeholder='+7 000 000 00 00']").setValue(DataGenerator.generateCorectPhonenumber());
+        $("[data-test-id='date'] [placeholder='Дата встречи']").click();
+        $("[data-test-id='date'] [placeholder='Дата встречи']").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id='date'] [placeholder='Дата встречи']").setValue(DataGenerator.generateDate(4,"dd.MM.YYYY"));
+        $("[data-test-id=agreement]").click();
+        $("[role=button] .button__content").click();
+        $(withText("Успешно!")).shouldBe(Condition.visible);
+        $("[role=button] .button__content").click();
+        $(withText("Перепланировать")).click();
+        $(withText("Успешно!")).shouldBe(Condition.visible);
+        $("[role=button] .button__content").click();
+        $(withText("Перепланировать")).click();
     }
 }
